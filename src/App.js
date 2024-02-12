@@ -24,9 +24,7 @@ function App() {
         <Route path='/WadernL' element={<WadernL/>}></Route>
         <Route path='/WadernH' element={<WadernH/>}></Route> 
       </Routes>
-        <Home/>
-        <TutorL/>
-        <StudentL/>
+      
     </div>
   );
 }
