@@ -1,31 +1,30 @@
-import React, { useState ,useEffect} from 'react'
-import {Image} from 'react-bootstrap'
-import clg from '../assets/kcelogo.webp'
-import '../Components/StudentL.css'
+import React, { useState, useEffect } from 'react';
+import { Image } from 'react-bootstrap';
+import clg from '../assets/kcelogo.webp';
+import '../Components/StudentL.css';
 import { FaUserCircle } from 'react-icons/fa';
-import { Form,Card, Button,Row,Col } from 'react-bootstrap';
-//import { FaUserCircle } from 'react-icons/fa';
+import { Form, Card, Button, Row, Col } from 'react-bootstrap';
 import { Badge } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
-//import {Link} from 'react-router-dom';
-import './StudentL.css';
-// import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function StudentH() {
   const [formData, setFormData] = useState({
     name: '',
-    rollNo:'',
+    rollNo: '',
     department: '',
     year: '',
     numberOfDays: '',
     outDate: '',
     inDate: '',
-    roomNo:'',
+    roomNo: '',
     reason: '',
-    purpose: '',
     place: ''
   });
+
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
   useEffect(() => {
@@ -34,22 +33,49 @@ function StudentH() {
     }, 1000);
     return () => clearInterval(intervalId);
   }, []);
+
   const formatDate = (date) => {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can handle form submission here, e.g., send data to backend or process it further
     console.log(formData);
+    const { name, rollNo, department, year, numberOfDays, outDate, inDate, roomNo, reason, place } = formData;
+    if (!name || !rollNo || !department || !year || !numberOfDays || !outDate || !inDate || !roomNo || !reason || !place) {
+      toast.warning('Please fill all fields.');
+      return;
+    }
+
+    try {
+      const StudentPDetails = await axios.post("http://localhost:3002/StudentsAdd",formData);
+      console.log(StudentPDetails);
+      toast.success('Details Added!');
+      setFormData({
+        name: "",
+        rollNo: "",
+        department: "",
+        year: "",
+        numberOfDays: "",
+        outDate: "",
+        inDate: "",
+        roomNo: "",
+        reason: "",
+        place: ""
+      });
+    } catch (err) {
+      console.log('Error in posting Student details', err);
+      toast.error('Failed to add details. Please try again later.');
+    }
   };
-  
-  
+
+ 
   return (
     <>
       <div style={{backgroundColor:'light-grey' ,height:'100%'}}>
@@ -88,7 +114,7 @@ function StudentH() {
          <Form.Group controlId="formName" className="w-100" style={{display:'flex'}}>
           <Col className='col-5'><Form.Label>RollNo:</Form.Label></Col>
            <Col className='col-7'>
-            <Form.Control type="text" name="name"  value={formData.rollNo} onChange={handleChange} /></Col>
+            <Form.Control type="text" name="rollNo"  value={formData.rollNo} onChange={handleChange} /></Col>
           </Form.Group>
          </Col>
          </Row>
@@ -112,7 +138,7 @@ function StudentH() {
                   label="1"
                   type="radio"
                   id="1"
-                  name="1"
+                  name="year"
                   value="1"
                   checked={formData.year === "1"}
                   onChange={handleChange}
@@ -122,7 +148,7 @@ function StudentH() {
                   label="2"
                   type="radio"
                   id="2"
-                  name="2"
+                  name="year"
                   value="2"
                   checked={formData.year === "2"}
                   onChange={handleChange}
@@ -132,7 +158,7 @@ function StudentH() {
                   label="3"
                   type="radio"
                   id="3"
-                  name="3"
+                  name="year"
                   value="3"
                   checked={formData.year === "3"}
                   onChange={handleChange}
@@ -142,7 +168,7 @@ function StudentH() {
                   label="4"
                   type="radio"
                   id="4"
-                  name="4"
+                  name="year"
                   value="4"
                   checked={formData.year === "4"}
                   onChange={handleChange}
@@ -181,7 +207,7 @@ function StudentH() {
           <Col className='col-8'>
           <Form.Group controlId="formNumberOfDays" className="w-100"  style={{display:'flex'}}>
           <Col className='col-5'>  <Form.Label>Number of Days<br/>Leave Required:</Form.Label></Col>
-          <Col className='col-7 mt-2'> <Form.Control type="number" name="numberOfDays" value={formData.numberOfDays} onChange={handleChange} /></Col> 
+          <Col className='col-7 mt-2'> <Form.Control type="number" name="numberOfDays" value={formData.numberOfDays} onChange={handleChange} /></Col>
           </Form.Group>
           </Col>
           </Row>
@@ -209,7 +235,7 @@ function StudentH() {
          <Form.Group controlId="formName" className="w-100" style={{display:'flex'}}>
           <Col className='col-5'><Form.Label>RoomNo:</Form.Label></Col>
            <Col className='col-7'>
-            <Form.Control type="text" name="name"  value={formData.roomNo} onChange={handleChange} /></Col>
+            <Form.Control type="text" name="roomNo"  value={formData.roomNo} onChange={handleChange} /></Col>
           </Form.Group>
          </Col>
          </Row>
@@ -222,7 +248,7 @@ function StudentH() {
           </Form.Group>
           </Col>
           </Row>
-        
+       
           <Row  className='mt-1' >
           <Col className='col-1'></Col>
           <Col className='col-8'>
@@ -239,23 +265,19 @@ function StudentH() {
             Submit
           </Button>
           </Col>
-        
+       
           </Row>
         </Form>
       </Card.Body>
     </Card>
-    </Col> 
+    </Col>
     </Row>
-  
-
-   
-     
-     
+    <ToastContainer autoClose={1500} position="top-center" />
       </div>
-    
+   
     </>
-  
+ 
   )
   }
 
-export default StudentH
+export default StudentH;

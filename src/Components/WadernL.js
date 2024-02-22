@@ -54,7 +54,7 @@ function WadernL() {
       <Row>
         <Col className='col-12 text-center'>   <FaUserCircle size={50} /> </Col>
       </Row>
-  
+ 
 
     <form onSubmit={handleSubmit} className="">
       <Row className='mt-3'>
@@ -79,13 +79,13 @@ function WadernL() {
         <Col className='col-12 text-center '> <button type="submit">Login</button></Col>
       </Row>
       </form>
-      </div> 
+      </div>
       </Container>
      
       </div>
-    
+   
     </>
-  
+ 
   )
 }
 
